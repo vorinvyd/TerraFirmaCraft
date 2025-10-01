@@ -1,14 +1,7 @@
 ### Changes
-
-- Fix tomatoes having fruit nutrition
-- Fix black dye not being able to be used for scribing.
-- Fix melons not being tagged as a fruit.
-- Fix unfired pots having the wrong item size (#3114)
-- Fix an error in the field guide for crops (#3113)
-- Fix mud bricks recipe not returning the right amount of items (#3116)
-- Fid the hardened clay recipe giving the wrong result.
-- Fix metal item tooltips only showing the result mB of one item.
-- Fix meat being unable to be cooked.
-- Fix the 'A Weird Rock' advancement.
-- Disable rendering the experience number when the experience bar is enabled.
-- More fixes to dead crops
+- Modified prickly pear textures
+### Bug Fixes
+- Fix crash when trying to get weather on SP shutdown (closes #3144 closes #3165)
+- Fixed calendar still ticking when the game is tick-frozen
+- Fixed milking animals filling full stacks of buckets (closes #3160)
+- Fixed pickling (closes #3147)

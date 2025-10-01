@@ -81,6 +81,10 @@ public interface CraftingRecipes extends Recipes
         // Removed Crafting Recipes
         remove(
             "anvil",
+            "bamboo_planks",
+            "bamboo_raft",
+            "bamboo_chest_raft",
+            "bamboo_hanging_sign",
             "barrel",
             "beetroot_soup",
             "bolt_armor_trim_smithing_template",
@@ -130,6 +134,7 @@ public interface CraftingRecipes extends Recipes
             "sentry_armor_trim_smithing_template",
             "shaper_armor_trim_smithing_template",
             "silence_armor_trim_smithing_template",
+            "scaffolding",
             "skull_banner_pattern",
             "slime_ball",
             "smoker",
@@ -375,7 +380,7 @@ public interface CraftingRecipes extends Recipes
             recipe("small")
                 .input('#', blocks.apply(SoilBlockType.MUD_BRICKS))
                 .pattern("# ", "##")
-                .shaped(TFCBlocks.MUD_BRICK_DECORATIONS.get(soil).stair(), 8);
+                .shaped(TFCBlocks.MUD_BRICK_DECORATIONS.get(soil).stair(), 4);
             recipe()
                 .input(blocks.apply(SoilBlockType.MUD))
                 .input(TFCBlocks.TREE_ROOTS)
@@ -502,6 +507,16 @@ public interface CraftingRecipes extends Recipes
                 .input(planks)
                 .damageInputs()
                 .shapeless(lumber, 4);
+            recipe("from_stairs")
+                .inputIsPrimary(TFCTags.Items.TOOLS_SAW)
+                .input(blocks.get(Wood.BlockType.STAIRS))
+                .damageInputs()
+                .shapeless(lumber, 3);
+            recipe("from_slabs")
+                .inputIsPrimary(TFCTags.Items.TOOLS_SAW)
+                .input(blocks.get(Wood.BlockType.SLAB))
+                .damageInputs()
+                .shapeless(lumber, 2);
             recipe().to2x2(lumber, planks, 1);
             recipe()
                 .input('L', lumber)
@@ -550,6 +565,7 @@ public interface CraftingRecipes extends Recipes
                 .input('S', TFCTags.Items.TOOLS_SAW)
                 .pattern("LS", "L ")
                 .damageInputs()
+                .source(0, 1)
                 .shaped(TFCItems.SUPPORTS.get(wood), 8);
             recipe()
                 .input('L', lumber)
@@ -908,7 +924,7 @@ public interface CraftingRecipes extends Recipes
         recipe()
             .input(Tags.Items.SANDS, 4)
             .input(Tags.Items.GRAVELS, 4)
-            .shapeless(TFCBlocks.AGGREGATE);
+            .shapeless(TFCBlocks.AGGREGATE, 8);
         recipe()
             .input('S', Items.STICK)
             .input('L', TFCTags.Items.LUMBER)
@@ -1103,6 +1119,7 @@ public interface CraftingRecipes extends Recipes
                 LacksTraitIngredient.of(FoodTraits.SALTED)
             ))
             .input(TFCItems.POWDERS.get(Powder.SALT))
+            .copyInput()
             .addTrait(FoodTraits.SALTED)
             .shapeless("salting");
         recipe()
@@ -1149,6 +1166,18 @@ public interface CraftingRecipes extends Recipes
         recipe("from_twigs")
             .input(TFCTags.Items.TWIGS)
             .shapeless(Items.STICK, 1);
+        recipe("from_golden_bamboo")
+            .input('X', TFCBlocks.PLANTS.get(Plant.GOLDEN_BAMBOO))
+            .pattern("X", "X")
+            .shaped(Items.STICK);
+        recipe("from_golden_bamboo")
+            .input('I', TFCTags.Items.BAMBOO)
+            .input('~', Tags.Items.STRINGS)
+            .pattern("I~I", "I I", "I I")
+            .shaped(Items.SCAFFOLDING);
+        recipe()
+            .input(TFCBlocks.PLANTS.get(Plant.GOLDEN_BAMBOO))
+            .shapeless(TFCBlocks.GOLDEN_BAMBOO_BLOCK, 9);
         recipe().to2x2(TFCItems.STRAW, TFCBlocks.THATCH, 1);
         recipe()
             .input(TFCBlocks.THATCH)

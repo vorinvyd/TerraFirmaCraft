@@ -274,7 +274,9 @@ public class BuiltinBlockTags extends TagsProvider<Block> implements Accessors
                 TFCBlocks.BRONZE_BELL,
                 TFCBlocks.BRASS_BELL,
                 TFCBlocks.LARGE_VESSEL
-            );
+            )
+            .add(TFCBlocks.MOLD_TABLE)
+            .add(TFCBlocks.CHANNEL);
         tag(BlockTags.MINEABLE_WITH_SHOVEL)
             .add2(TFCBlocks.SOIL)
             .add(TFCBlocks.SAND)
@@ -483,6 +485,7 @@ public class BuiltinBlockTags extends TagsProvider<Block> implements Accessors
         tag(KELP_BRANCH).add(TFCBlocks.PLANTS.get(Plant.GIANT_KELP_PLANT));
         tag(BAMBOO).add(TFCBlocks.PLANTS.get(Plant.GOLDEN_BAMBOO)).add(Blocks.BAMBOO);
         tag(BAMBOO_SAPLING).add(TFCBlocks.PLANTS.get(Plant.GOLDEN_BAMBOO_SAPLING)).add(Blocks.BAMBOO_SAPLING);
+        tag(BlockTags.BAMBOO_BLOCKS).add(TFCBlocks.GOLDEN_BAMBOO_BLOCK);
         tag(BlockTags.BAMBOO_PLANTABLE_ON).add(TFCBlocks.PLANTS.get(Plant.GOLDEN_BAMBOO_SAPLING), TFCBlocks.PLANTS.get(Plant.GOLDEN_BAMBOO)).remove(Tags.Blocks.SANDS);
         tag(LIVING_SPREADING_BUSHES)
             .add(TFCBlocks.SPREADING_BUSHES)
@@ -725,8 +728,11 @@ public class BuiltinBlockTags extends TagsProvider<Block> implements Accessors
         tag(POWDER_SNOW_REPLACEABLE).add(
             Blocks.SNOW_BLOCK,
             Blocks.PACKED_ICE,
-            Blocks.BLUE_ICE,
-            TFCBlocks.SEA_ICE.get());
+            Blocks.BLUE_ICE);
+        tag(COLD_OCEAN_BLOCKS)
+            .addTag(POWDER_SNOW_REPLACEABLE)
+            .add(Blocks.POWDER_SNOW)
+            .add(TFCBlocks.SEA_ICE);
         tag(TIDE_POOL_BLOCKS).add(
             TFCBlocks.GROUNDCOVER.get(GroundcoverBlockType.CLAM),
             TFCBlocks.GROUNDCOVER.get(GroundcoverBlockType.MOLLUSK),

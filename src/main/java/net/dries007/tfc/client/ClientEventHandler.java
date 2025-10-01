@@ -6,6 +6,7 @@
 
 package net.dries007.tfc.client;
 
+import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -53,6 +54,8 @@ import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.Resource;
+import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
@@ -89,6 +92,7 @@ import net.dries007.tfc.client.model.IngotPileBlockModel;
 import net.dries007.tfc.client.model.PlantBlockModel;
 import net.dries007.tfc.client.model.ScrapingBlockModel;
 import net.dries007.tfc.client.model.TrimmedItemModel;
+import net.dries007.tfc.client.model.MoldsModelLoader;
 import net.dries007.tfc.client.model.entity.AlpacaModel;
 import net.dries007.tfc.client.model.entity.BisonModel;
 import net.dries007.tfc.client.model.entity.BlackBearModel;
@@ -164,6 +168,7 @@ import net.dries007.tfc.client.render.blockentity.BarrelBlockEntityRenderer;
 import net.dries007.tfc.client.render.blockentity.BellowsBlockEntityRenderer;
 import net.dries007.tfc.client.render.blockentity.BladedAxleBlockEntityRenderer;
 import net.dries007.tfc.client.render.blockentity.BowlBlockEntityRenderer;
+import net.dries007.tfc.client.render.blockentity.ChannelBlockEntityRenderer;
 import net.dries007.tfc.client.render.blockentity.CharcoalForgeBlockEntityRenderer;
 import net.dries007.tfc.client.render.blockentity.ChestItemRenderer;
 import net.dries007.tfc.client.render.blockentity.CrankshaftBlockEntityRenderer;
@@ -174,6 +179,7 @@ import net.dries007.tfc.client.render.blockentity.GrillBlockEntityRenderer;
 import net.dries007.tfc.client.render.blockentity.HotPouredGlassBlockEntityRenderer;
 import net.dries007.tfc.client.render.blockentity.JavelinItemRenderer;
 import net.dries007.tfc.client.render.blockentity.LoomBlockEntityRenderer;
+import net.dries007.tfc.client.render.blockentity.MoldBlockEntityRenderer;
 import net.dries007.tfc.client.render.blockentity.NestBoxBlockEntityRenderer;
 import net.dries007.tfc.client.render.blockentity.PanItemRenderer;
 import net.dries007.tfc.client.render.blockentity.PitKilnBlockEntityRenderer;
@@ -373,6 +379,8 @@ public final class ClientEventHandler
         final RenderType cutout = RenderType.cutout();
         final RenderType cutoutMipped = RenderType.cutoutMipped();
         final RenderType translucent = RenderType.translucent();
+
+        // todo this is non-functional
         final Predicate<RenderType> ghostBlock = rt -> rt == cutoutMipped || rt == Sheets.translucentCullBlockSheet();
 
         // Rock blocks
@@ -385,23 +393,24 @@ public final class ClientEventHandler
         TFCBlocks.ORE_DEPOSITS.values().forEach(map -> map.values().forEach(reg -> ItemBlockRenderTypes.setRenderLayer(reg.get(), cutout)));
 
         // Wood blocks
-        final Predicate<RenderType> leafPredicate = layer -> Minecraft.useFancyGraphics() ? layer == cutoutMipped : layer == solid;
         TFCBlocks.WOODS.values().forEach(map -> {
             Stream.of(SAPLING, DOOR, TRAPDOOR, FENCE, FENCE_GATE, BUTTON, PRESSURE_PLATE, SLAB, STAIRS, TWIG, BARREL, SCRIBING_TABLE, SEWING_TABLE, SHELF, POTTED_SAPLING, ENCASED_AXLE, CLUTCH, GEAR_BOX).forEach(type -> ItemBlockRenderTypes.setRenderLayer(map.get(type).get(), cutout));
-            Stream.of(LEAVES, FALLEN_LEAVES).forEach(type -> ItemBlockRenderTypes.setRenderLayer(map.get(type).get(), leafPredicate));
+            // todo see ItemBlockRenderTypes we need to switch the leaves properties correctly
+            Stream.of(LEAVES, FALLEN_LEAVES).forEach(type -> ItemBlockRenderTypes.setRenderLayer(map.get(type).get(), cutoutMipped));
         });
 
+        // todo see ItemBlockRenderTypes we need to switch the leaves properties correctly
         ItemBlockRenderTypes.setRenderLayer(TFCBlocks.TREE_ROOTS.get(), cutoutMipped);
-        ItemBlockRenderTypes.setRenderLayer(TFCBlocks.PINE_KRUMMHOLZ.get(), leafPredicate);
-        ItemBlockRenderTypes.setRenderLayer(TFCBlocks.DOUGLAS_FIR_KRUMMHOLZ.get(), leafPredicate);
-        ItemBlockRenderTypes.setRenderLayer(TFCBlocks.SPRUCE_KRUMMHOLZ.get(), leafPredicate);
-        ItemBlockRenderTypes.setRenderLayer(TFCBlocks.WHITE_CEDAR_KRUMMHOLZ.get(), leafPredicate);
-        ItemBlockRenderTypes.setRenderLayer(TFCBlocks.ASPEN_KRUMMHOLZ.get(), leafPredicate);
-        ItemBlockRenderTypes.setRenderLayer(TFCBlocks.POTTED_PINE_KRUMMHOLZ.get(), leafPredicate);
-        ItemBlockRenderTypes.setRenderLayer(TFCBlocks.POTTED_DOUGLAS_FIR_KRUMMHOLZ.get(), leafPredicate);
-        ItemBlockRenderTypes.setRenderLayer(TFCBlocks.POTTED_SPRUCE_KRUMMHOLZ.get(), leafPredicate);
-        ItemBlockRenderTypes.setRenderLayer(TFCBlocks.POTTED_WHITE_CEDAR_KRUMMHOLZ.get(), leafPredicate);
-        ItemBlockRenderTypes.setRenderLayer(TFCBlocks.POTTED_ASPEN_KRUMMHOLZ.get(), leafPredicate);
+        ItemBlockRenderTypes.setRenderLayer(TFCBlocks.PINE_KRUMMHOLZ.get(), cutoutMipped);
+        ItemBlockRenderTypes.setRenderLayer(TFCBlocks.DOUGLAS_FIR_KRUMMHOLZ.get(), cutoutMipped);
+        ItemBlockRenderTypes.setRenderLayer(TFCBlocks.SPRUCE_KRUMMHOLZ.get(), cutoutMipped);
+        ItemBlockRenderTypes.setRenderLayer(TFCBlocks.WHITE_CEDAR_KRUMMHOLZ.get(), cutoutMipped);
+        ItemBlockRenderTypes.setRenderLayer(TFCBlocks.ASPEN_KRUMMHOLZ.get(), cutoutMipped);
+        ItemBlockRenderTypes.setRenderLayer(TFCBlocks.POTTED_PINE_KRUMMHOLZ.get(), cutoutMipped);
+        ItemBlockRenderTypes.setRenderLayer(TFCBlocks.POTTED_DOUGLAS_FIR_KRUMMHOLZ.get(), cutoutMipped);
+        ItemBlockRenderTypes.setRenderLayer(TFCBlocks.POTTED_SPRUCE_KRUMMHOLZ.get(), cutoutMipped);
+        ItemBlockRenderTypes.setRenderLayer(TFCBlocks.POTTED_WHITE_CEDAR_KRUMMHOLZ.get(), cutoutMipped);
+        ItemBlockRenderTypes.setRenderLayer(TFCBlocks.POTTED_ASPEN_KRUMMHOLZ.get(), cutoutMipped);
 
         // Grass
         TFCBlocks.SOIL.get(SoilBlockType.GRASS).values().forEach(reg -> ItemBlockRenderTypes.setRenderLayer(reg.get(), cutoutMipped));
@@ -666,6 +675,8 @@ public final class ClientEventHandler
         event.registerBlockEntityRenderer(TFCBlockEntities.WINDMILL.get(), WindmillBlockEntityRenderer::new);
         event.registerBlockEntityRenderer(TFCBlockEntities.CRANKSHAFT.get(), ctx -> new CrankshaftBlockEntityRenderer());
         event.registerBlockEntityRenderer(TFCBlockEntities.BELL.get(), TFCBellBlockEntityRenderer::new);
+        event.registerBlockEntityRenderer(TFCBlockEntities.CHANNEL.get(), ctx -> new ChannelBlockEntityRenderer());
+        event.registerBlockEntityRenderer(TFCBlockEntities.MOLD_TABLE.get(), ctx -> new MoldBlockEntityRenderer());
     }
 
     public static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event)
@@ -771,6 +782,15 @@ public final class ClientEventHandler
 
         event.register(CrankshaftBlockEntityRenderer.WHEEL_MODEL);
 
+        ResourceManager rm = Minecraft.getInstance().getResourceManager();
+        Map<ResourceLocation, Resource> resources = rm.listResources("models/block/mold", r -> r.getPath().endsWith(".json")); 
+		for (ResourceLocation model : resources.keySet()) 
+        {
+            String path = model.getPath();
+            path = path.substring("models/".length(), path.length() - ".json".length());
+            register(event, ResourceLocation.fromNamespaceAndPath(model.getNamespace(), path));
+		}
+
         TFCConfig.CLIENT.additionalSpecialModels.get().forEach(s -> register(event, Helpers.resourceLocation(s)));
     }
 
@@ -787,6 +807,7 @@ public final class ClientEventHandler
         event.register(Helpers.identifier("double_ingot_pile"), DoubleIngotPileBlockModel.INSTANCE);
         event.register(Helpers.identifier("scraping"), ScrapingBlockModel.INSTANCE);
         event.register(Helpers.identifier("plant"), PlantBlockModel.Loader.INSTANCE);
+        event.register(Helpers.identifier("mold"), new MoldsModelLoader());
     }
 
     public static void registerColorHandlerBlocks(RegisterColorHandlersEvent.Block event)

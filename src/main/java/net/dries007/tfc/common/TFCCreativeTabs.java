@@ -483,6 +483,10 @@ public final class TFCCreativeTabs
         }
         out.accept(TFCItems.UNFIRED_BELL_MOLD);
         out.accept(TFCItems.BELL_MOLD);
+        out.accept(TFCItems.UNFIRED_CHANNEL);
+        out.accept(TFCItems.UNFIRED_MOLD_TABLE);
+        out.accept(TFCBlocks.CHANNEL);
+        out.accept(TFCBlocks.MOLD_TABLE);
 
         out.accept(TFCItems.WOODEN_BUCKET);
         out.accept(TFCItems.JUG);
@@ -613,6 +617,7 @@ public final class TFCCreativeTabs
                 out.accept(TFCBlocks.PALM_MOSAIC_STAIRS);
                 out.accept(TFCBlocks.PALM_MOSAIC_SLAB);
             }
+            out.accept(TFCBlocks.GOLDEN_BAMBOO_BLOCK);
             accept(out, TFCItems.LUMBER, wood);
             accept(out, TFCItems.BOATS, wood);
             accept(out, TFCItems.SUPPORTS, wood);
