@@ -541,6 +541,8 @@ public final class TFCCreativeTabs
         out.accept(TFCBlocks.FIREPIT);
         out.accept(TFCBlocks.GRILL);
         out.accept(TFCBlocks.POT);
+        out.accept(TFCBlocks.STOVE);
+        out.accept(TFCBlocks.STOVE_POT);
         out.accept(TFCBlocks.BELLOWS);
         out.accept(TFCBlocks.POWDERKEG);
         out.accept(TFCBlocks.BARREL_RACK);
@@ -567,6 +569,10 @@ public final class TFCCreativeTabs
         out.accept(TFCBlocks.FIREPROOF_DOOR);
         out.accept(TFCBlocks.FIREBOX);
         out.accept(TFCBlocks.FIRE_CLAY_BLOCK);
+        out.accept(TFCBlocks.VANE);
+        out.accept(TFCBlocks.ANEMOMETER);
+        out.accept(TFCBlocks.CALENDAR_CLOCK);
+        out.accept(TFCBlocks.THERMOMETER);
 
         out.accept(TFCBlocks.AGGREGATE);
         out.accept(TFCBlocks.PLAIN_ALABASTER);
