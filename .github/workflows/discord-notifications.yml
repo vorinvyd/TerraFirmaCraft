@@ -1,0 +1,23 @@
+name: Discord Notifications
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  send-discord-notification:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Get Commit Message
+        id: get_commit_message
+        run: echo "commit_message=$(git log -1 --pretty=%B)" >> $GITHUB_OUTPUT
+      - name: Send Discord Message
+        uses: Retr0-01/better-discord-notification@main
+        with:
+          webhook-url: 'https://discord.com/api/webhooks/1444494537622814850/84aqvVWjdEOex6DqoFJxMRDo_Qd36Dm6HXhgBRQ46GQ43rbDZCwyuFws0J5oiWgpef6G'
+          embed-color: '3093151'
+          ignore-hidden: 'false'
+          footer-icon: 'https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png'
