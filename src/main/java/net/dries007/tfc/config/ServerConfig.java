@@ -148,13 +148,19 @@ public class ServerConfig extends BaseConfig
     public final Supplier<Boolean> powderKegEnableAutomation;
     public final Supplier<Double> powderKegStrengthModifier;
     public final Supplier<Integer> powderKegFuseTime;
+    // Blocks - Firebox
+    public final Supplier<Boolean> fireboxEnableAutomation;
     // Blocks - Hot Water
     public final Supplier<Double> hotWaterHealAmount;
     // Blocks - Sapling
     public final Supplier<Double> saplingGrowthModifier;
     public final Map<Wood, Supplier<Integer>> saplingGrowthTicks;
     public final Map<FruitBlocks.Tree, Supplier<Integer>> fruitSaplingGrowthTicks;
+    public final Supplier<Integer> fruitBranchGrowthTicks;
     public final Supplier<Integer> bananaSaplingGrowthTicks;
+    public final Supplier<Integer> bananaPlantGrowthTicks;
+    public final Supplier<Integer> fruitPickBloomDelayTicks;
+    public final Supplier<Integer> berryBushGrowthTicks;
     // Blocks - Crops
     public final Supplier<Double> cropGrowthModifier;
     public final Supplier<Double> cropExpiryModifier;
@@ -390,7 +396,7 @@ public class ServerConfig extends BaseConfig
         crucibleCapacity = builder.comment("Tank capacity of a crucible (in mB).").define("crucibleCapacity", 4000, 0, FluidAlloy.MAX_ALLOY);
         cruciblePouringRate = builder.comment("A modifier for how fast fluid containers empty into crucibles. Containers will empty 1 mB every (this) number of ticks.").define("cruciblePouringRate", 4, 1, Integer.MAX_VALUE);
         crucibleFastPouringRate = builder.comment("A modifier for how fast fluid containers empty into crucibles when shift is held. Containers will empty 1 mB every (this) number of ticks.").define("crucibleFastPouringRate", 1, 1, Integer.MAX_VALUE);
-        crucibleEnableAutomation = builder.comment("If true, barrels will interact with in-world automation such as hoppers on a side-specific basis.").define("crucibleEnableAutomation", true);
+        crucibleEnableAutomation = builder.comment("If true, crucibles will interact with in-world automation such as hoppers on a side-specific basis.").define("crucibleEnableAutomation", true);
 
         builder.swap("anvil");
 
@@ -487,6 +493,10 @@ public class ServerConfig extends BaseConfig
         powderKegStrengthModifier = builder.comment("A modifier to the strength of powderkegs when exploding. A max powderkeg explosion is 64, and all explosions are capped to this size no matter the value of the modifier.").define("powderKegStrengthModifier", 1d, 0, 64);
         powderKegFuseTime = builder.comment("The time in ticks for a powderkeg to defuse. Default is 80 ticks, or 4 seconds.").define("powderKegFuseTime", 80, 1, Integer.MAX_VALUE);
 
+        builder.swap("firebox");
+
+        fireboxEnableAutomation = builder.comment("If true, fireboxes will interact with in-world automation such as hoppers or comparators").define("fireboxEnableAutomation", true);
+
         builder.swap("hotWater");
 
         hotWaterHealAmount = builder.comment("An amount that sitting in hot water will restore health, approximately twice per second.").define("hotWaterHealAmount", 0.08, 0.0, 20.0);
@@ -504,9 +514,21 @@ public class ServerConfig extends BaseConfig
         fruitSaplingGrowthTicks = Helpers.mapOf(FruitBlocks.Tree.class, type -> builder
             .comment("Ticks required before a %s sapling can grow into a tree".formatted(getUserFriendlyName(type)))
             .define(getConfigName(type, "SaplingGrowthTicks"), type.defaultTicksToGrow(), 0, Integer.MAX_VALUE));
+        fruitBranchGrowthTicks = builder
+            .comment("Ticks required between fruit branch growth steps")
+            .define("fruitBranchGrowthTicks", 5 * ICalendar.CALENDAR_TICKS_IN_DAY, 0, Integer.MAX_VALUE);
         bananaSaplingGrowthTicks = builder
             .comment("Ticks required before a banana sapling can grow into a tree")
             .define("bananaSaplingGrowthTicks", 6 * ICalendar.CALENDAR_TICKS_IN_DAY, 0, Integer.MAX_VALUE);
+        bananaPlantGrowthTicks = builder
+            .comment("Ticks required between banana tree growth steps")
+            .define("bananaPlantGrowthTicks", 4 * ICalendar.CALENDAR_TICKS_IN_DAY, 0, Integer.MAX_VALUE);
+        fruitPickBloomDelayTicks = builder
+            .comment("Ticks required for fruit blocks to bloom after being placed/picked")
+            .define("fruitPickBloomDelayTicks", 10 * ICalendar.CALENDAR_TICKS_IN_DAY, 0, Integer.MAX_VALUE);
+        berryBushGrowthTicks = builder
+            .comment("Ticks required between berry bush growth steps")
+            .define("bananaPlantGrowthTicks", 4 * ICalendar.CALENDAR_TICKS_IN_DAY, 0, Integer.MAX_VALUE);
 
         builder.swap("crops");
 

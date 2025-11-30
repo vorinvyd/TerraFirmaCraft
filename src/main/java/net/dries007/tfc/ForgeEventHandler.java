@@ -8,6 +8,7 @@ package net.dries007.tfc;
 
 import com.mojang.logging.LogUtils;
 import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
@@ -20,6 +21,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
@@ -115,6 +117,7 @@ import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
+import vazkii.patchouli.api.BookDrawScreenEvent;
 
 import net.dries007.tfc.client.TFCSounds;
 import net.dries007.tfc.common.TFCTags;
@@ -817,7 +820,7 @@ public final class ForgeEventHandler
     public static void onLivingHurt(LivingIncomingDamageEvent event)
     {
         float amount = event.getAmount();
-        
+
         // Vanilla kill command uses Float.MAX_VALUE, possibly others
         if (amount == Float.MAX_VALUE)
         {
@@ -848,7 +851,6 @@ public final class ForgeEventHandler
         float damageModifier = 1f;
         final Item useItem = event.getEntity().getUseItem().getItem();
 
-        // todo: the original code here was broken during porting, what do we even want to do here?
         if (useItem == Items.SHIELD)
         {
             damageModifier = 0.25f;
@@ -858,7 +860,8 @@ public final class ForgeEventHandler
             damageModifier = shield.getDamageBlocked();
         }
 
-        event.setBlockedDamage(event.getOriginalBlockedDamage() * damageModifier);
+        if (!event.getDamageSource().is(DamageTypeTags.IS_PROJECTILE))
+            event.setBlockedDamage(event.getOriginalBlockedDamage() * damageModifier);
     }
 
     public static void onItemStacked(ItemStackedOnOtherEvent event)

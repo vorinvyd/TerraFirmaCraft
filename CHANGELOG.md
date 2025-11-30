@@ -1,32 +1,17 @@
 ### Changes
-- Visual rework to nutrition, climate, and calendar screens
-- Added Precision Clock
-  - Outputs an analog redstone signal based on the month or the hour
-- Added Weather Vane
-  - Outputs an analog redstone signal based on the wind direction
-- Added Anemometer
-  - Outputs an analog redstone signal based on the wind speed
-- Added Thermometer
-  - Outputs an analog redstone signal based on the ambient temperature, or the temperature of a device
-- Shoveling snow no longer drops snowballs
-- Add barrel recipe for mass crafting of mud from dirt
-- Rain and snow are now pushed by the wind
-  - Both weather types are angled by the wind
-  - Snow is sped up by the wind
+- Improved Russian localization
+- Modified trip hammer behavior to drop their items when rotated the wrong way (Closes #3345)
 
 ### Bug Fixes
-- Fix invalid item placement below shelves (Closes #3154)
-- Fix broken windmill rotation rendering
-- Prevent invalid item placement on stairs
-- Fix bows not being craftable
-- Fixed a visual big in firepit textures
-- Fixed a clay dupe exploit via bowl uncrafting (Closes #3212)
-- Re-add recipes to recycle cobble slabs/stairs/walls into loose rocks (Closes #3220)
-- Fix saws being able to fell trees (Closes #3215)
-- Prevent players from eating whole melons and pumpkins (Closes #3211)
-- Fix washing ceramic bowls returning wooden bowls
-- Fix glassworking recipes giving invalid item stacks and bricking servers (Closes #3214)
-- Fix crops that grow with sticks dropping extra items on death
-- Allow whole pumpkins and melons to be composted
-- Fix Barrels deleting their contents upon placement into a barrel rack (Closes #3178)
-- Fix Fireboxes playing lit sounds while unlit
+- Added dynamic models for mold tables, drastically reducing rendering lag when many are placed in the same area (Closes #3347 Closes #3348)
+- Fixed a crash with Berry Bushes (#3352)
+- Make bleaching recipes return the correct items (Closes #3354)
+- Fixed bed recipes being different from 1.20
+- Fixed a crash with Candle Cakes (Closes #3340)
+- Allow ash to be removed from stoves with pots (Closes #3346)
+- Fix loom progress desync on the client (Closes #3276)
+- Fix inconsistent behavior of trip hammers at high rotation speeds (Closes #3349)
+- Added a missing dye recipe for cornflowers
+- Fixed snow accumulating on magma blocks
+- Technical improvements to plant blockstates
+

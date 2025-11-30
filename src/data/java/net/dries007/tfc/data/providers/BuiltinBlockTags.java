@@ -284,7 +284,8 @@ public class BuiltinBlockTags extends TagsProvider<Block> implements Accessors
             .add(TFCBlocks.MOLD_TABLE)
             .add(TFCBlocks.CHANNEL)
             .add(TFCBlocks.CALENDAR_CLOCK)
-            .add(TFCBlocks.THERMOMETER);
+            .add(TFCBlocks.THERMOMETER)
+            .add(TFCBlocks.CREATIVE_MOTOR);
         tag(BlockTags.MINEABLE_WITH_SHOVEL)
             .add2(TFCBlocks.SOIL)
             .add(TFCBlocks.SAND)
@@ -327,7 +328,7 @@ public class BuiltinBlockTags extends TagsProvider<Block> implements Accessors
             .add(TFCBlocks.ORES, Ore.OPAL);
         // Needs Stone Tool is ~ Copper, which is every TFC pickaxe, so we don't bother here
         // "Incorrect For Tool" includes the "Needs For Tool", so we don't touch, since we don't add levels
-        tag(BlockTags.SNOW_LAYER_CANNOT_SURVIVE_ON).add(TFCBlocks.SEA_ICE, TFCBlocks.ICE_PILE);
+        tag(BlockTags.SNOW_LAYER_CANNOT_SURVIVE_ON).add(TFCBlocks.SEA_ICE, TFCBlocks.ICE_PILE).add(TFCBlocks.MAGMA_BLOCKS);
         tag(BlockTags.SNOW_LAYER_CAN_SURVIVE_ON).add(TFCBlocks.SOIL.get(SoilBlockType.MUD));
         tag(BlockTags.REPLACEABLE).addEveryTFC(e -> e.defaultBlockState().canBeReplaced());
 
@@ -508,7 +509,7 @@ public class BuiltinBlockTags extends TagsProvider<Block> implements Accessors
             .add(TFCBlocks.SPREADING_CANES);
         tag(SPREADING_BUSHES)
             .addTags(LIVING_SPREADING_BUSHES)
-            .add(TFCBlocks.DEAD_BERRY_BUSH, TFCBlocks.DEAD_CANE);
+            .add(TFCBlocks.DEAD_BERRY_BUSH, TFCBlocks.DEAD_CANE, TFCBlocks.BANANA_PLANT);
         tag(THORNY_BUSHES).add(
             TFCBlocks.SPREADING_BUSHES.get(FruitBlocks.SpreadingBush.RASPBERRY),
             TFCBlocks.SPREADING_BUSHES.get(FruitBlocks.SpreadingBush.BLACKBERRY));
@@ -657,7 +658,7 @@ public class BuiltinBlockTags extends TagsProvider<Block> implements Accessors
         tag(TREE_GROWS_ON).addTag(BlockTags.DIRT);
         tag(WILD_CROP_GROWS_ON).addTag(BlockTags.DIRT);
         tag(SPREADING_FRUIT_GROWS_ON).addTags(BlockTags.DIRT, FARMLANDS, Tags.Blocks.GRAVELS);
-        tag(BUSH_PLANTABLE_ON).addTags(BlockTags.DIRT, FARMLANDS);
+        tag(BUSH_PLANTABLE_ON).addTags(BlockTags.DIRT, FARMLANDS, CLAYS);
         tag(DRY_PLANT_PLANTABLE_ON).addTags(BlockTags.SAND, Tags.Blocks.SANDS, Tags.Blocks.GRAVELS, COARSE_DIRT, BUSH_PLANTABLE_ON).add(TFCBlocks.SANDSTONE, SandstoneBlockType.RAW);
         tag(EPIPHYTE_PLANTABLE_ON).addTags(BlockTags.LOGS, STONES_RAW, STONES_HARDENED).add(TFCBlocks.SANDSTONE, SandstoneBlockType.RAW);
         tag(GRASS_PLANTABLE_ON)
@@ -766,6 +767,10 @@ public class BuiltinBlockTags extends TagsProvider<Block> implements Accessors
             .add(TFCBlocks.FIREBOX)
             .add(TFCBlocks.BLAST_FURNACE)
             .add(TFCBlocks.CRUCIBLE);
+        tag(CLOCK_READABLE)
+            .add(TFCBlocks.WOODS, Wood.BlockType.BARREL)
+            .add(TFCBlocks.BLOOMERY)
+            .add(TFCBlocks.FIREBOX);
         tag(SEA_STACK_ROCKS).add(
             TFCBlocks.ROCK_BLOCKS.get(Rock.BASALT).get(Rock.BlockType.HARDENED),
             TFCBlocks.ROCK_BLOCKS.get(Rock.LIMESTONE).get(Rock.BlockType.HARDENED),

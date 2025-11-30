@@ -13,12 +13,9 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
-import javax.naming.directory.DirContext;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.locale.Language;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.util.Mth;
@@ -29,7 +26,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.FireBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.phys.Vec2;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import org.jetbrains.annotations.Nullable;
@@ -53,7 +49,7 @@ import net.dries007.tfc.common.blockentities.IHeatable;
 import net.dries007.tfc.common.blockentities.IngotPileBlockEntity;
 import net.dries007.tfc.common.blockentities.LampBlockEntity;
 import net.dries007.tfc.common.blockentities.LoomBlockEntity;
-import net.dries007.tfc.common.blockentities.MoldBlockEntity;
+import net.dries007.tfc.common.blockentities.MoldTableBlockEntity;
 import net.dries007.tfc.common.blockentities.NestBoxBlockEntity;
 import net.dries007.tfc.common.blockentities.PitKilnBlockEntity;
 import net.dries007.tfc.common.blockentities.PlacedItemBlockEntity;
@@ -61,7 +57,7 @@ import net.dries007.tfc.common.blockentities.PotBlockEntity;
 import net.dries007.tfc.common.blockentities.PowderkegBlockEntity;
 import net.dries007.tfc.common.blockentities.ThermometerBlockEntity;
 import net.dries007.tfc.common.blockentities.TickCounterBlockEntity;
-import net.dries007.tfc.common.blockentities.TickCountingBranchBlockEntity;
+import net.dries007.tfc.common.blockentities.TickingPlantBlockEntity;
 import net.dries007.tfc.common.blockentities.VaneBlockEntity;
 import net.dries007.tfc.common.blockentities.rotation.RotatingBlockEntity;
 import net.dries007.tfc.common.blockentities.rotation.WaterWheelBlockEntity;
@@ -92,7 +88,7 @@ import net.dries007.tfc.common.blocks.devices.FirepitBlock;
 import net.dries007.tfc.common.blocks.devices.IngotPileBlock;
 import net.dries007.tfc.common.blocks.devices.JackOLanternBlock;
 import net.dries007.tfc.common.blocks.devices.LampBlock;
-import net.dries007.tfc.common.blocks.devices.MoldBlock;
+import net.dries007.tfc.common.blocks.devices.MoldTableBlock;
 import net.dries007.tfc.common.blocks.devices.NestBoxBlock;
 import net.dries007.tfc.common.blocks.devices.PitKilnBlock;
 import net.dries007.tfc.common.blocks.devices.PlacedItemBlock;
@@ -105,6 +101,7 @@ import net.dries007.tfc.common.blocks.plant.fruit.FruitTreeSaplingBlock;
 import net.dries007.tfc.common.blocks.rotation.AbstractShaftAxleBlock;
 import net.dries007.tfc.common.blocks.rotation.ClutchBlock;
 import net.dries007.tfc.common.blocks.rotation.CrankshaftBlock;
+import net.dries007.tfc.common.blocks.rotation.CreativeRotationBlock;
 import net.dries007.tfc.common.blocks.rotation.EncasedAxleBlock;
 import net.dries007.tfc.common.blocks.rotation.GearBoxBlock;
 import net.dries007.tfc.common.blocks.rotation.WaterWheelBlock;
@@ -170,10 +167,11 @@ public final class BlockEntityTooltips
         callback.register("gearbox", ROTATING, GearBoxBlock.class);
         callback.register("crankshaft", ROTATING, CrankshaftBlock.class);
         callback.register("quern", ROTATING, QuernBlock.class);
+        callback.register("creative_motor", ROTATIONAL_SOURCE, CreativeRotationBlock.class);
         callback.register("water_wheel", ROTATIONAL_SOURCE, WaterWheelBlock.class);
         callback.register("windmill", ROTATIONAL_SOURCE, WindmillBlock.class);
         callback.register("hot_poured_glass", HOT_POURED_GLASS, HotPouredGlassBlock.class);
-        callback.register("mold_table", MOLD_TABLE, MoldBlock.class);
+        callback.register("mold_table", MOLD_TABLE, MoldTableBlock.class);
         callback.register("placed_item", PLACED_ITEM, PlacedItemBlock.class);
         callback.register("shelf", PLACED_ITEM, ShelfBlock.class);
         callback.register("calendar_clock", CALENDAR_CLOCK, CalendarClockBlock.class);
@@ -231,14 +229,19 @@ public final class BlockEntityTooltips
     public static final BlockEntityTooltip CALENDAR_CLOCK = (level, state, pos, entity, tooltip) -> {
         if (entity instanceof CalendarClockBlockEntity clock)
         {
-            if (clock.getBlockState().getValue(TFCBlockStateProperties.CLOCK_MONTH_MODE))
+            if (clock.getBlockState().getValue(CalendarClockBlock.MODE).equals(CalendarClockBlock.Mode.HOUR))
+            {
+                tooltip.accept(Component.translatable("tfc.tooltip.calendar_clock_hour_mode"));
+            }
+            else if (clock.getBlockState().getValue(CalendarClockBlock.MODE).equals(CalendarClockBlock.Mode.MONTH))
             {
                 tooltip.accept(Component.translatable("tfc.tooltip.calendar_clock_month_mode"));
             }
             else
             {
-                tooltip.accept(Component.translatable("tfc.tooltip.calendar_clock_hour_mode"));
+                tooltip.accept(Component.translatable("tfc.tooltip.calendar_clock_timer_mode"));
             }
+
             tooltip.accept(Calendars.CLIENT.getTimeAndDate());
         }
     };
@@ -460,7 +463,7 @@ public final class BlockEntityTooltips
     };
 
     public static final BlockEntityTooltip FRUIT_TREE_SAPLING = (level, state, pos, entity, tooltip) -> {
-        if (entity instanceof TickCountingBranchBlockEntity counter && state.getBlock() instanceof FruitTreeSaplingBlock sapling)
+        if (entity instanceof TickingPlantBlockEntity counter && state.getBlock() instanceof FruitTreeSaplingBlock sapling)
         {
             timeLeft(level, tooltip, sapling.getTicksToGrow() - counter.getTicksSinceUpdate(), Component.translatable("tfc.jade.ready_to_grow"));
         }
@@ -592,7 +595,7 @@ public final class BlockEntityTooltips
     };
 
     public static final BlockEntityTooltip MOLD_TABLE = (level, state, pos, entity, tooltip) -> {
-        if (entity instanceof MoldBlockEntity mold)
+        if (entity instanceof MoldTableBlockEntity mold)
         {
             heat(tooltip, mold.getInventory().getTemperature());
         }

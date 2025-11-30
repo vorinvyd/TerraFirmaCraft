@@ -371,7 +371,7 @@ def make_book(rm: ResourceManager, i18n: I18n, local_instance: bool = False, rev
                 'Orange', 'D', 'D', 'H', 'H', 'H', 'H', 'F', 'F', 'R', 'D', 'D', 'D',
                 'Peach',  'H', 'H', 'H', 'F', 'F', 'R', 'D', 'D', 'D', 'D', 'D', 'H',
                 'Plum',   'H', 'H', 'H', 'H', 'F', 'F', 'R', 'D', 'D', 'D', 'D', 'D',
-                'Banana',  'D', 'D', 'D', 'H', 'H', 'H', 'H', 'F', 'F', 'R', 'D', 'D',
+                'Banana',  'D', 'D', 'H', 'H', 'H', 'H', 'F', 'F', 'R', 'D', 'D', 'D',
             ],
                 'The fruiting calendar for fruit trees.',
                 'Fruit Trees',
@@ -396,6 +396,19 @@ def make_book(rm: ResourceManager, i18n: I18n, local_instance: bool = False, rev
             tall_bush_text('elderberry', 'Elderberry Bush', '$(br2)Elderberry bushes grow from February to May, start flowering in June and July, and bear fruit in August.$(br2)They can be found in areas with few trees.'),
             tall_bush_multiblock('elderberry', 'An example elderberry bush.'),
             page_break(),
+            table([
+                '', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
+                'Blackberry',   'D', 'H', 'H', 'H', 'H', 'F', 'F', 'R', 'D', 'D', 'D', 'D',
+                'Raspberry',  'D', 'D', 'D', 'H', 'H', 'H', 'H', 'F', 'F', 'R', 'D', 'D',
+                'Blueberry',  'D', 'H', 'H', 'H', 'H', 'F', 'F', 'R', 'D', 'D', 'D', 'D',
+                'Elderberry',  'D', 'H', 'H', 'H', 'H', 'F', 'F', 'R', 'D', 'D', 'D', 'D',
+            ],
+                'The fruiting calendar for large berry bushes.',
+                'Large Berry Bushes',
+                {'D': {'fill': '0xa8986a'}, 'H': {'fill': '0x6ab553'}, 'F': {'fill': '0xcca0db'}, 'R': {'fill': '0xa217ff'}},
+                [{'text': 'Dormant', 'color': '0xa8986a'}, {'text': 'Healthy', 'color': '0x6ab553'}, {'text': 'Flowering', 'color': '0xcca0db'}, {'text': 'Fruiting', 'color': '0xa217ff'}],
+                12, 45, 15, 10, 5, 11
+            ),
             text('$(thing)Small Bushes$() are a kind of low lying fruit block that spawns in forests. Small bushes occasionally will spread to surrounding blocks, if there aren\'t too many other bushes nearby.$(br2)Small bushes will go through three sizes, and when grown, they are harvested just with $(item)$(k:key.use)$().', title='Small Bushes').anchor('small_bushes'),
             multimultiblock('Three different sizes of a healthy small bush', *[block_spotlight('', '', 'tfc:plant/bunchberry_bush[lifecycle=healthy,stage=%s]' % stage) for stage in range(0, 3)]),
             page_break(),
@@ -421,16 +434,16 @@ def make_book(rm: ResourceManager, i18n: I18n, local_instance: bool = False, rev
             small_bush_multiblock('cranberry', 'The monthly stages of a cranberry bush.'),
             table([
                 '', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
-                'Snowberry',   'D', 'D', 'H', 'H', 'H', 'H', 'F', 'F', 'R', 'D', 'D', 'D',
                 'Bunchberry',  'D', 'D', 'D', 'D', 'H', 'H', 'H', 'F', 'F', 'R', 'D', 'D',
                 'Gooseberry',  'D', 'D', 'D', 'H', 'H', 'H', 'H', 'F', 'F', 'R', 'D', 'D',
+                'Snowberry',   'D', 'D', 'H', 'H', 'H', 'H', 'F', 'F', 'R', 'D', 'D', 'D',
                 'Cloudberry',  'D', 'H', 'H', 'H', 'H', 'F', 'F', 'F', 'R', 'D', 'D', 'D',
                 'Strawberry',  'F', 'F', 'R', 'D', 'D', 'D', 'D', 'D', 'D', 'H', 'H', 'H',
-                'Wintergreen', 'D', 'D', 'D', 'H', 'H', 'H', 'H', 'H', 'F', 'F', 'R', 'D',
+                'Wintergreen', 'D', 'D', 'D', 'D', 'H', 'H', 'H', 'H', 'H', 'F', 'F', 'R',
                 'Cranberry',   'D', 'D', 'H', 'H', 'H', 'H', 'F', 'F', 'R', 'D', 'D', 'D',
             ],
-                'The fruiting calendar for berry bushes.',
-                'Berry Bushes',
+                'The fruiting calendar for small berry bushes.',
+                'Small Berry Bushes',
                 {'D': {'fill': '0xa8986a'}, 'H': {'fill': '0x6ab553'}, 'F': {'fill': '0xcca0db'}, 'R': {'fill': '0xa217ff'}},
                 [{'text': 'Dormant', 'color': '0xa8986a'}, {'text': 'Healthy', 'color': '0x6ab553'}, {'text': 'Flowering', 'color': '0xcca0db'}, {'text': 'Fruiting', 'color': '0xa217ff'}],
                 12, 45, 15, 10, 5, 11
@@ -756,7 +769,7 @@ def make_book(rm: ResourceManager, i18n: I18n, local_instance: bool = False, rev
             entity('tfc:quail' + ANIMAL_NBT, 'A quail.', '', scale=0.7),
             text('$(thing)Donkeys$() spawn in wetter plains, with $(l:the_world/climate#temperature)temperature$() of at least -15°C, and between 130 and 400mm of $(l:the_world/climate#rainfall)rainfall$(). They are a kind of $(l:mechanics/animal_husbandry#horses)Equine$() that can carry a $(thing)chest$(). They eat $(thing)grains$() and $(thing)fruits$(). They have 1 child, are pregnant for 19 days, and reach adulthood in 80 days. They can have children 6 times.', title='Donkeys').anchor('donkey'),
             entity('tfc:donkey' + ANIMAL_NBT, 'A donkey.', '', scale=0.6),
-            text('$(thing)Mules$() spawn in plains with $(l:the_world/climate#temperature)temperature$() of at least -15°C, and between 130 and 400mm of $(l:the_world/climate#rainfall)rainfall$(). They are a kind of $(l:mechanics/animal_husbandry#horses)Equine$() that can carry a $(thing)chest$() and are the always-male product of a $(thing)horse$() and a $()donkey$(). They eat $(thing)grains$() and $(thing)fruits$(). They reach adulthood in 80 days.', title='Mules').anchor('mule'),
+            text('$(thing)Mules$() spawn in plains with $(l:the_world/climate#temperature)temperature$() of at least -15°C, and between 130 and 400mm of $(l:the_world/climate#rainfall)rainfall$(). They are a kind of $(l:mechanics/animal_husbandry#horses)Equine$() that can carry a $(thing)chest$() and are the sterile product of a $(thing)horse$() and a $()donkey$(). They eat $(thing)grains$() and $(thing)fruits$(). They reach adulthood in 80 days.', title='Mules').anchor('mule'),
             entity('tfc:mule' + ANIMAL_NBT, 'A mule.', '', scale=0.6),
             text('$(thing)Horses$() spawn in plains with $(l:the_world/climate#temperature)temperature$() of at least -15°C, and between 130 and 400mm of $(l:the_world/climate#rainfall)rainfall$(). They are a kind of $(l:mechanics/animal_husbandry#horses)Equine$(). They eat $(thing)grains$() and $(thing)fruits$(). They have 1 child, are pregnant for 19 days, and reach adulthood in 80 days. They can have children 6 times.', title='Horses').anchor('horse'),
             entity('tfc:horse' + ANIMAL_NBT, 'A horse.', '', scale=0.6),
@@ -1278,7 +1291,7 @@ def make_book(rm: ResourceManager, i18n: I18n, local_instance: bool = False, rev
             item_spotlight('#tfc:compost_greens/high', title='Compost Greens', text_contents='Some $(2)green$() items contribute a great amount to the composter, such as fruits and vegetables. To fill a composter\'s appetite of green items, you need 4 of them.'),
             item_spotlight('#tfc:compost_browns/low', title='Compost Browns', text_contents='Some $(4)brown$() items contribute little to the composter, such as tall plants like dry phragmite, tree ferns, and vines, as well as fallen leaves. To fill a composter\'s appetite of brown items, you need 16 of them.'),
             item_spotlight('#tfc:compost_browns/medium', title='Compost Browns', text_contents='Some $(4)brown$() items contribute moderately to the composter, such as wood ash and jute. To fill a composter\'s appetite of brown items, you need 8 of them.'),
-            item_spotlight('#tfc:compost_browns/high', title='Compost Browns', text_contents='Some $(4)brown$() items contribute a great amount to the composter, such as melons, pumpkins, dead grass, pinecones, humus, and driftwood. To fill a composter\'s appetite of brown items, you need 4 of them.'),
+            item_spotlight('#tfc:compost_browns/high', title='Compost Browns', text_contents='Some $(4)brown$() items contribute a great amount to the composter, such as dead grass, pinecones, humus, and driftwood. To fill a composter\'s appetite of brown items, you need 4 of them.'),
             item_spotlight('#tfc:compost_poisons', title='Compost Poisons', text_contents='Some items will $(c)poison$() your compost. These include $(c)meat$() and $(c)bones$(). Poison compost, when used on a crop, instantly kills it.'),
             empty_last_page(),
         )),
@@ -1545,19 +1558,30 @@ def make_wild_crop_table(start_index: int, end_index: int) -> List[str | Dict[st
 
 def detail_crop(crop: str) -> str:
     data = CROPS[crop]
+
+    nitrogen = data.nitrogen;
+    phosphorous = data.phosphorous;
+    potassium = data.potassium;
+
+    # Cover crops consume no nutrients, so their max output is 30% of the enumerated value
+    if (data.category == 'cover'):
+        nitrogen = 0.3 * nitrogen;
+        phosphorous = 0.3 * phosphorous;
+        potassium = 0.3 * potassium;
+
     string= '$(bold)$(l:the_world/climate#temperature)Temperature$(): %d - %d °C$(br)$(bold)$(l:mechanics/hydration)Hydration$(): %d - %d %%$(br)$(bold)Category$(): %s$(br)$(br)' % (data.min_temp_growth, data.max_temp_growth, data.min_hydration, data.max_hydration, data.category.title())
-    if data.nitrogen < 0:
-        n = '$(bold)$(b)N: +%s ' % -data.nitrogen
+    if nitrogen < 0:
+        n = '$(bold)$(b)N: +%s ' % -nitrogen
     else:
-        n = '$(bold)$(b)N: %s ' % data.nitrogen
-    if data.phosphorous < 0:
-        p = '$(bold)$(6)P: +%s ' % -data.phosphorous
+        n = '$(bold)$(b)N: %s ' % nitrogen
+    if phosphorous < 0:
+        p = '$(bold)$(6)P: +%s ' % -phosphorous
     else:
-        p = '$(bold)$(6)P: %s ' % data.phosphorous
-    if data.potassium <0:
-        k = '$(bold)$(d)K: +%s$()$(br)' % -data.potassium
+        p = '$(bold)$(6)P: %s ' % phosphorous
+    if potassium <0:
+        k = '$(bold)$(d)K: +%s$()$(br)' % -potassium
     else:
-        k = '$(bold)$(d)K: %s$()$(br)' % data.potassium
+        k = '$(bold)$(d)K: %s$()$(br)' % potassium
 
     return string + n + p + k
 

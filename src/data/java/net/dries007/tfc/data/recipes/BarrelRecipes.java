@@ -7,9 +7,6 @@
 package net.dries007.tfc.data.recipes;
 
 import java.util.function.Function;
-import java.util.stream.Stream;
-
-import net.dries007.tfc.common.recipes.outputs.*;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
@@ -17,7 +14,6 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
@@ -32,7 +28,6 @@ import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.rock.Ore;
 import net.dries007.tfc.common.blocks.soil.SoilBlockType;
-import net.dries007.tfc.common.blocks.wood.Wood;
 import net.dries007.tfc.common.component.food.FoodTraits;
 import net.dries007.tfc.common.fluids.SimpleFluid;
 import net.dries007.tfc.common.fluids.TFCFluids;
@@ -46,6 +41,14 @@ import net.dries007.tfc.common.recipes.ingredients.HasTraitIngredient;
 import net.dries007.tfc.common.recipes.ingredients.HeatIngredient;
 import net.dries007.tfc.common.recipes.ingredients.LacksTraitIngredient;
 import net.dries007.tfc.common.recipes.ingredients.NotRottenIngredient;
+import net.dries007.tfc.common.recipes.outputs.AddHeatModifier;
+import net.dries007.tfc.common.recipes.outputs.AddTraitModifier;
+import net.dries007.tfc.common.recipes.outputs.CopyInputModifier;
+import net.dries007.tfc.common.recipes.outputs.DyeLeatherModifier;
+import net.dries007.tfc.common.recipes.outputs.EmptyBowlModifier;
+import net.dries007.tfc.common.recipes.outputs.ItemStackProvider;
+import net.dries007.tfc.common.recipes.outputs.RemoveDyeModifier;
+import net.dries007.tfc.common.recipes.outputs.RemoveTraitModifier;
 
 import static net.minecraft.world.item.crafting.Ingredient.*;
 
@@ -179,16 +182,16 @@ public interface BarrelRecipes extends Recipes
         removeDye(TFCTags.Items.COLORED_WOOL, Items.WHITE_WOOL);
         removeDye(TFCTags.Items.COLORED_CARPETS, Items.WHITE_CARPET);
         removeDye(TFCTags.Items.COLORED_BEDS, Items.WHITE_BED);
-        removeDye(TFCTags.Items.COLORED_BANNERS, Items.WHITE_BANNER);
-        removeDye(TFCTags.Items.COLORED_TERRACOTTA, Items.WHITE_TERRACOTTA);
-        removeDye(TFCTags.Items.COLORED_GLAZED_TERRACOTTA, Items.WHITE_GLAZED_TERRACOTTA);
+        removeDye(ItemTags.BANNERS, Items.WHITE_BANNER); // White banner should still be lye-able to clear patterns
+        removeDye(TFCTags.Items.COLORED_TERRACOTTA, Items.TERRACOTTA);
+        removeDye("glazed", TFCTags.Items.COLORED_GLAZED_TERRACOTTA, Items.TERRACOTTA);
         removeDye(TFCTags.Items.COLORED_SHULKER_BOXES, Items.SHULKER_BOX);
         removeDye(TFCTags.Items.COLORED_CONCRETE_POWDER, TFCBlocks.AGGREGATE);
         removeDye(TFCTags.Items.COLORED_CANDLES, TFCBlocks.CANDLE);
         removeDye(TFCTags.Items.COLORED_WINDMILL_BLADES, TFCItems.WINDMILL_BLADES.get(DyeColor.WHITE));
-        removeDye(TFCTags.Items.COLORED_RAW_ALABASTER, TFCBlocks.RAW_ALABASTER.get(DyeColor.WHITE));
-        removeDye(TFCTags.Items.COLORED_ALABASTER_BRICKS, TFCBlocks.ALABASTER_BRICKS.get(DyeColor.WHITE));
-        removeDye(TFCTags.Items.COLORED_POLISHED_ALABASTER, TFCBlocks.POLISHED_ALABASTER.get(DyeColor.WHITE));
+        removeDye(TFCTags.Items.COLORED_RAW_ALABASTER, TFCBlocks.PLAIN_ALABASTER);
+        removeDye(TFCTags.Items.COLORED_ALABASTER_BRICKS, TFCBlocks.PLAIN_ALABASTER_BRICKS);
+        removeDye(TFCTags.Items.COLORED_POLISHED_ALABASTER, TFCBlocks.PLAIN_POLISHED_ALABASTER);
         removeDye(TFCTags.Items.COLORED_VESSELS, TFCItems.UNFIRED_VESSEL);
         removeDye(TFCTags.Items.COLORED_LARGE_VESSELS, TFCItems.UNFIRED_LARGE_VESSEL);
         dye(Items.WHITE_WOOL, "wool");
@@ -234,7 +237,7 @@ public interface BarrelRecipes extends Recipes
         musicDisc(DyeColor.BLUE, Items.MUSIC_DISC_WARD);
 
         // Instant Recipes
-        for (SoilBlockType.Variant soil: SoilBlockType.Variant.values())
+        for (SoilBlockType.Variant soil : SoilBlockType.Variant.values())
         {
             barrel()
                 .input(soil.getBlock(SoilBlockType.DIRT).get()).input(Fluids.WATER, 250)
@@ -331,6 +334,15 @@ public interface BarrelRecipes extends Recipes
     private void removeDye(TagKey<Item> input, ItemLike output)
     {
         barrel("bleaching_" + nameOf(output).replace("white_", "").replace("/white", ""))
+            .input(input)
+            .input(fluidOf(SimpleFluid.LYE), 25)
+            .output(output)
+            .sealed(hours(1));
+    }
+
+    private void removeDye(String prefix, TagKey<Item> input, ItemLike output)
+    {
+        barrel("bleaching_" + prefix + "_" + nameOf(output).replace("white_", "").replace("/white", ""))
             .input(input)
             .input(fluidOf(SimpleFluid.LYE), 25)
             .output(output)
