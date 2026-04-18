@@ -27,13 +27,13 @@
     },
     {
       "type": "tfc:sealed_barrel_recipe",
-      "recipe": "tfc:barrel/red_leather",
+      "recipe": "tfc:barrel/red_dyeable",
       "text": "Жидкие красители даже могут красить кожу, как если бы она была изготовлена такого цвета!"
     },
     {
       "type": "tfc:sealed_barrel_recipe",
       "anchor": "lye",
-      "recipe": "tfc:barrel/bleaching_bed",
+      "recipe": "tfc:barrel/bleach_bed",
       "text": "Пять кучек $(item)золы$() и 1000 мБ $(item)воды$(), доведённые до кипения в $(l:mechanics/pot)горшке$(), дают щелочь. 25 мБ щёлочи стирают окраску предмета."
     },
     {

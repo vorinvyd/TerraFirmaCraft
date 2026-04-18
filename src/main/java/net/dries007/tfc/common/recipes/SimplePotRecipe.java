@@ -20,6 +20,7 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 
+import net.dries007.tfc.common.blockentities.IPotInventory;
 import net.dries007.tfc.common.blockentities.PotBlockEntity;
 import net.dries007.tfc.common.recipes.outputs.ItemStackProvider;
 import net.dries007.tfc.common.recipes.outputs.PotOutput;
@@ -72,12 +73,12 @@ public class SimplePotRecipe extends PotRecipe
     }
 
     @Override
-    public PotOutput getOutput(PotBlockEntity.PotInventory inventory)
+    public PotOutput getOutput(IPotInventory inventory)
     {
         // Compute the outputs here, before the pot inventory is cleared
         final List<ItemStack> outputs = new ArrayList<>(5);
         final List<ItemStackProvider> providers = new ArrayList<>(outputItems);
-        for (int i = PotBlockEntity.SLOT_EXTRA_INPUT_START; i < inventory.getSlots(); i++)
+        for (int i = inventory.inputStart(); i <= inventory.inputEnd(); i++)
         {
             if (providers.isEmpty())
                 break;
@@ -116,12 +117,12 @@ public class SimplePotRecipe extends PotRecipe
     record SimpleOutput(FluidStack fluidOutput, List<ItemStack> itemOutputs) implements PotOutput
     {
         @Override
-        public void onFinish(PotBlockEntity.PotInventory inventory)
+        public void onFinish(IPotInventory inventory)
         {
             // Copy the outputs to the pot inventory
             for (int i = 0; i < itemOutputs.size(); i++)
             {
-                inventory.setStackInSlot(PotBlockEntity.SLOT_EXTRA_INPUT_START + i, itemOutputs.get(i));
+                inventory.setStackInSlot(inventory.inputStart() + i, itemOutputs.get(i));
             }
             inventory.clearFluid();
             inventory.fill(fluidOutput, IFluidHandler.FluidAction.EXECUTE);

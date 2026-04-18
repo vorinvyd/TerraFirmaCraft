@@ -125,7 +125,6 @@ import net.dries007.tfc.common.effect.TFCEffects;
 import net.dries007.tfc.common.entities.ai.prey.PestAi;
 import net.dries007.tfc.common.entities.prey.Pest;
 import net.dries007.tfc.mixin.accessor.RecipeManagerAccessor;
-import net.dries007.tfc.util.climate.OverworldClimateModel;
 import net.dries007.tfc.util.collections.IndirectHashCollection;
 import net.dries007.tfc.util.data.FluidHeat;
 import net.dries007.tfc.util.data.Support;
@@ -592,7 +591,7 @@ public final class Helpers
         }
         else if (level.random.nextFloat() <= 0.7) // Otherwise, 30% chance to just skip checking for climate-specific pests and spawning a rat
         {
-            final float rainfall = data.getRainfall(pos);
+            final float rainfall = data.getAverageRainfall(pos);
             if (rainfall < 160)
             {
                 return Helpers.randomEntity(TFCTags.Entities.DESERT_PESTS, level.random);
@@ -954,6 +953,29 @@ public final class Helpers
             if (!stack.isEmpty())
                 return false;
         return true;
+    }
+
+    /**
+     * @return {@code true} if any slot in the provided BE's inventory is empty.
+     */
+    public static boolean hasOpenSlot(InventoryBlockEntity<?> entity)
+    {
+        return hasOpenSlot(entity.getInventory());
+    }
+
+    /**
+     * @return {@code true} if any slot in the provided inventory is empty.
+     */
+    public static boolean hasOpenSlot(IItemHandler inventory)
+    {
+        for (int slot = 0; slot < inventory.getSlots(); slot++)
+        {
+            if (inventory.getStackInSlot(slot).isEmpty())
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -1470,6 +1492,17 @@ public final class Helpers
     public static int ceilDiv(int num, int div)
     {
         return (num + div - 1) / div;
+    }
+
+    /**
+     * Returns an approximate angle in the range [0, 4] where 4 is the equivalent of 360 degrees from a vector in the form x, y
+     */
+    public static double diamondAngle(double x, double y)
+    {
+        if (y >= 0)
+            return (x >= 0 ? y / (x + y) : 1 - x / (-x + y));
+        else
+            return (x < 0 ? 2 - y / (-x - y) : 3 + x / (x - y));
     }
 
     /**
