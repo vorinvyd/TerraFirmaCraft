@@ -1,3 +1,5 @@
+<p><a href="https://billing.kinetichosting.net/aff.php?aff=293" rel="nofollow"><img src="https://raw.githubusercontent.com/MomentariyModder/branding/main/sites/site/kinetic_new.png" width="1127"></a></p>
+
 ### Additions
 - Added obsidian knapping, and a full obsidian stone tool set
 - Added the Obsidian Macuahuitl, a stone age equivalent of a sword
@@ -14,3 +16,5 @@
 ### Fixes
 - Hyenas will no longer howl like wolves
 - Add missing tags and cooking recipes for the new fish
+
+<p><a href="https://billing.kinetichosting.net/aff.php?aff=293" rel="nofollow"><img src="https://raw.githubusercontent.com/MomentariyModder/branding/main/sites/site/kinetic_new.png" width="1127"></a></p>
