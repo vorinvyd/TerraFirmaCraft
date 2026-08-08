@@ -6,7 +6,6 @@
 
 package net.dries007.tfc.data.recipes;
 
-import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -20,6 +19,7 @@ import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.plant.Plant;
 import net.dries007.tfc.common.blocks.rock.Ore;
+import net.dries007.tfc.common.blocks.wood.Wood;
 import net.dries007.tfc.common.items.Food;
 import net.dries007.tfc.common.items.Powder;
 import net.dries007.tfc.common.items.TFCItems;
@@ -29,6 +29,7 @@ import net.dries007.tfc.common.recipes.ingredients.NotRottenIngredient;
 import net.dries007.tfc.common.recipes.outputs.ChanceModifier;
 import net.dries007.tfc.common.recipes.outputs.CopyFoodModifier;
 import net.dries007.tfc.common.recipes.outputs.ItemStackProvider;
+import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.Metal;
 
 public interface HeatRecipes extends Recipes
@@ -105,6 +106,15 @@ public interface HeatRecipes extends Recipes
         addFood(Food.RAINBOW_TROUT, Food.COOKED_RAINBOW_TROUT);
         addFood(Food.SALMON, Food.COOKED_SALMON);
         addFood(Food.SMALLMOUTH_BASS, Food.COOKED_SMALLMOUTH_BASS);
+        addFood(Food.TILAPIA, Food.COOKED_TILAPIA);
+        addFood(Food.SPOTTED_GUDGEON, Food.COOKED_SPOTTED_GUDGEON);
+        addFood(Food.RED_PIRANHA, Food.COOKED_RED_PIRANHA);
+        addFood(Food.PEACOCK_BASS, Food.COOKED_PEACOCK_BASS);
+        addFood(Food.PACU, Food.COOKED_PACU);
+        addFood(Food.NORTHERN_PIKE, Food.COOKED_NORTHERN_PIKE);
+        addFood(Food.MUKSUN, Food.COOKED_MUKSUN);
+        addFood(Food.BURBOT, Food.COOKED_BURBOT);
+        addFood(Food.ARCTIC_CHAR, Food.COOKED_ARCTIC_CHAR);
         addFood(Food.FROG_LEGS, Food.COOKED_FROG_LEGS);
         addFood(Food.FOX, Food.COOKED_FOX);
 
@@ -123,6 +133,7 @@ public interface HeatRecipes extends Recipes
         burnFood("bread", Ingredient.of(TFCTags.Items.BREAD), 700);
         burnFood("meat", Ingredient.of(TFCTags.Items.COOKED_MEATS), 900);
 
+
         for (Ore ore : Ore.values())
             if (ore.isGraded())
                 addOres(ore, ore.metal());
@@ -137,6 +148,15 @@ public interface HeatRecipes extends Recipes
             ItemStackProvider.empty(),
             new FluidStack(meltFluidFor(metal), units(type)),
             temperatureOf(metal), new ItemStack(item).isDamageableItem()))));
+
+        Helpers.mapOf(Metal.class, Metal::allParts, metal ->
+            Helpers.mapOf(Wood.class, wood -> TFCItems.HANGING_SIGNS.get(wood).get(metal)).values()
+        ).forEach((metal, items) -> add("hanging_sign/" + metal.name(), new HeatingRecipe(
+            Ingredient.of(items.stream().map(ItemStack::new)),
+            ItemStackProvider.empty(),
+            new FluidStack(meltFluidFor(metal), 4),
+            temperatureOf(metal), false)));
+
     }
 
     private Fluid meltFluidFor(Metal metal)
